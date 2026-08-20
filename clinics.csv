@@ -1,0 +1,75 @@
+name,state,city,address,phone,lat,lon
+Abia State University Teaching Hospital,Abia,Aba,"Umueze Rd, Aba 453115, Abia State",+234 903 715 4985,5.1400,7.3400
+Federal Medical Centre Umuahia,Abia,Umuahia,"Aba Rd, opposite Guaranty Trust Bank, Umuahia 440236, Abia State",+234 803 808 9468,5.5324,7.4924
+Federal Medical Centre Yola,Adamawa,Yola,"Lamido Zubairu Way, Yola 640284, Adamawa State",+234 806 554 0843,9.2084,12.4815
+Specialist Hospital Yola,Adamawa,Jimeta,"Hospital Road, Jimeta 640101, Adamawa State",+234 707 063 1228,9.2800,12.4500
+University of Uyo Teaching Hospital,Akwa Ibom,Uyo,"Abak Rd, Before Ekom Iman Junction, Uyo 532101, Akwa Ibom State",+234 902 114 3800,5.0100,7.8600
+Ibom Specialist Hospital,Akwa Ibom,Uyo,"Ikot Ekpene - Uyo Rd, Uyo 531116, Akwa Ibom State",+234 802 181 4674,5.0460,7.8820
+Nnamdi Azikiwe University Teaching Hospital,Anambra,Nnewi,"College of Health Science, Nnewi 435101, Anambra State",+234 806 850 6910,6.0300,6.9100
+Chukwuemeka Odumegwu Ojukwu University Teaching Hospital,Anambra,Awka,"Amaku, Awka 420110, Anambra State",,6.2100,7.0700
+Abubakar Tafawa Balewa University Teaching Hospital,Bauchi,Bauchi,"No 1 Hospital Road, Off Yandoka Street, Bauchi, Bauchi State",+234 706 630 3804,10.3243,9.8309
+Specialist Hospital Bauchi,Bauchi,Bauchi,"Hospital Road, Bauchi, Bauchi State",,10.3150,9.8430
+Niger Delta University Teaching Hospital,Bayelsa,Okolobiri,"Okolobiri 569101, Bayelsa State",+234 803 775 6006,4.9811,6.3317
+Federal Medical Centre Yenagoa,Bayelsa,Yenagoa,"Hospital Road, Ovom, Yenagoa 569101, Bayelsa State",+234 806 544 7750,4.9215,6.2650
+Benue State University Teaching Hospital,Benue,Makurdi,"KM 3 Makurdi-Gboko Rd, Makurdi, Benue State",+234 808 720 8583,7.7300,8.5300
+Federal Medical Centre Makurdi,Benue,Makurdi,"No 1 Atiku Abubakar Road, Mission Ward, Makurdi, Benue State",+234 906 948 0478,7.7333,8.5211
+University of Maiduguri Teaching Hospital,Borno,Maiduguri,"Bama Road, Maiduguri, Borno State",+234 76 232 567,11.8150,13.1900
+State Specialist Hospital Maiduguri,Borno,Maiduguri,"Shehu Laminu Way, Zango Ward, Maiduguri, Borno State",+234 802 000 0000,11.8333,13.1500
+University of Calabar Teaching Hospital,Cross River,Calabar,"Off Airport Road, Calabar South, Calabar, Cross River State",+234 803 272 4525,4.9450,8.3280
+General Hospital Calabar,Cross River,Calabar,"Mary Slessor Avenue, Efut Ekondo, Calabar, Cross River State",,4.9536,8.3360
+Delta State University Teaching Hospital,Delta,Oghara,"Otefe Road, off Benin-Warri Express Way, Oghara, Delta State",+234 803 924 3001,5.9380,5.6700
+Central Hospital Warri,Delta,Warri,"No 1 Mabiaku Road, G.R.A., Warri, Delta State",+234 813 953 3834,5.5180,5.7500
+Alex Ekwueme Federal University Teaching Hospital,Ebonyi,Abakaliki,"Ntezi Abba, Abakaliki, Ebonyi State",+234 803 746 3229,6.3222,8.0933
+David Umahi Federal University Teaching Hospital,Ebonyi,Uburu,"Umunaga / Enuagu Road, Uburu, Ebonyi State",+234 815 839 8323,6.0380,7.7470
+University of Benin Teaching Hospital,Edo,Benin City,"Benin-Lagos Express Road, Uselu, Benin City, Edo State",+234 704 638 4155,6.3880,5.6030
+Irrua Specialist Teaching Hospital,Edo,Irrua,"KM 87, Benin-Auchi Road, Irrua, Edo State",+234 805 806 5577,6.7370,6.2160
+Federal Teaching Hospital Ido-Ekiti,Ekiti,Ido Ekiti,"Ifaki-Ido Rd, Ido Ekiti 371101, Ekiti State",+234 806 526 6109,7.8428,5.1822
+Ekiti State University Teaching Hospital,Ekiti,Ado Ekiti,"State Hospital Road, Ado Ekiti 360102, Ekiti State",+234 909 305 0548,7.6211,5.2214
+University of Nigeria Teaching Hospital,Enugu,Ituku-Ozalla,"Ituku-Ozalla, Enugu 402109, Enugu State",+234 708 662 8572,6.2486,7.5083
+Enugu State University Teaching Hospital,Enugu,Enugu,"Park Lane, GRA, Enugu 400102, Enugu State",,6.4428,7.4988
+Federal Teaching Hospital Gombe,Gombe,Gombe,"Federal Low Cost Area, Gombe 760253, Gombe State",+234 802 260 8686,10.2897,11.1672
+Specialist Hospital Gombe,Gombe,Gombe,"Hospital Road, Gombe 760252, Gombe State",,10.2833,11.1667
+Imo State University Teaching Hospital,Imo,Orlu,"Orlu 473111, Imo State",,5.7950,7.0370
+Federal Medical Centre Owerri,Imo,Owerri,"105 Hospital Road / Orlu Road, Owerri 460281, Imo State",+234 909 588 4734,5.4850,7.0350
+Federal Medical Centre Birnin Kudu,Jigawa,Birnin Kudu,"Birnin Kudu 721101, Jigawa State",+234 806 433 2328,11.4503,9.4789
+Rasheed Shekoni Teaching Hospital,Jigawa,Dutse,"Madobi / 40 Wakanukuguma Road, Dutse 720101, Jigawa State",+234 806 704 2501,11.7000,9.3300
+Ahmadu Bello University Teaching Hospital,Kaduna,Zaria,"Zaria-Funtua Road, Shika, Zaria 810105, Kaduna State",+234 704 845 5219,11.1500,7.6400
+Barau Dikko Teaching Hospital,Kaduna,Kaduna,"12 Lafia Road, City Centre, Kaduna 800212, Kaduna State",+234 705 385 6556,10.5181,7.4383
+Aminu Kano Teaching Hospital,Kano,Kano,"Zaria Road, Ungwa Uku, Kano 700101, Kano State",+234 805 720 3511,11.9600,8.5400
+Murtala Mohammed Specialist Hospital,Kano,Kano,"Kufar Mata Road, Kano City 700114, Kano State",+234 703 709 1334,11.9960,8.5180
+Federal Medical Centre Katsina,Katsina,Katsina,"Murtala Mohammed Way, Katsina 820101, Katsina State",+234 705 093 5454,12.9880,7.6010
+General Amadi Rimi Specialist Hospital,Katsina,Batagarawa,"Dutsinma Road, Batagarawa 820102, Katsina State",,12.9400,7.6100
+Federal Teaching Hospital Birnin Kebbi,Kebbi,Birnin Kebbi,"C5PQ+CMP, Birnin Kebbi 860101, Kebbi State",+234 806 433 2328,12.4500,4.1900
+Sir Yahaya Memorial Hospital,Kebbi,Birnin Kebbi,"Along Haliru Abdu Road, Birnin Kebbi 860101, Kebbi State",+234 803 597 8511,12.4530,4.1950
+Federal Medical Centre Lokoja,Kogi,Lokoja,"Federal Medical Centre Rd, Lokoja 260101, Kogi State",+234 803 388 9481,7.8010,6.7440
+Kogi State Specialist Hospital,Kogi,Lokoja,"Murtala Mohammed Wy, Lokoja 260101, Kogi State",+234 817 105 0240,7.8020,6.7410
+University of Ilorin Teaching Hospital,Kwara,Ilorin,"Oke-Ose / PMB 1459, Ilorin 241102, Kwara State",+234 813 787 5019,8.4790,4.5410
+Sobi Specialist Hospital,Kwara,Ilorin,"Sobi Hill Rd, Alagbado, Ilorin 240101, Kwara State",+234 803 502 6133,8.5330,4.5660
+Lagos University Teaching Hospital,Lagos,Surulere,"Ishaga Rd, Idi-Araba, Surulere, Lagos 102215, Lagos State",+234 807 059 1395,6.5180,3.3570
+Lagos State University Teaching Hospital (LASUTH),Lagos,Ikeja,"1-5 Oba Akinjobi Way, GRA, Ikeja 101233, Lagos State",+234 909 148 1560,6.5940,3.3440
+Dalhatu Araf Specialist Hospital,Nasarawa,Lafia,"Shendam Road, Lafia 950101, Nasarawa State",+234 472 21207,8.4900,8.5200
+Federal University Teaching Hospital Lafia,Nasarawa,Lafia,"BAD Road, Shinge, Lafia 950101, Nasarawa State",+234 703 767 7300,8.4930,8.5150
+General Hospital Minna,Niger,Minna,"Off Eastern Bypass, Tudun Wada South, Minna 920101, Niger State",,9.6130,6.5560
+Ibrahim Badamasi Babangida Specialist Hospital,Niger,Minna,"Hospital Road, Minna 920103, Niger State",,9.6100,6.5500
+Olabisi Onabanjo University Teaching Hospital,Ogun,Sagamu,"Hospital Road, Sagamu 121102, Ogun State",+234 816 370 1056,6.8500,3.6500
+Federal Medical Centre Abeokuta,Ogun,Abeokuta,"Olabisi Onabanjo Way, Idi-Aba, Abeokuta 110118, Ogun State",,7.1400,3.3600
+University of Medical Sciences Teaching Hospital,Ondo,Ondo,"Laje Road, Ondo 341106, Ondo State",+234 816 370 3824,7.1000,4.8300
+Federal Medical Centre Owo,Ondo,Owo,"19 Owo - Oba Road, Owo 341101, Ondo State",,7.1900,5.5800
+Obafemi Awolowo University Teaching Hospitals Complex,Osun,Ile-Ife,"Ilesha Road, Ile-Ife 220101, Osun State",+234 702 525 5255,7.5000,4.5500
+LAUTECH Teaching Hospital,Osun,Osogbo,"96 Dada Lane, Osogbo 230103, Osun State",,7.7800,4.5600
+University College Hospital,Oyo,Ibadan,"Queen Elizabeth II Road, Agodi, Ibadan 200285, Oyo State",+234 813 173 3447,7.4000,3.9000
+Bowen University Teaching Hospital,Oyo,Ogbomoso,"BUTH Campus, Ogbomoso 212102, Oyo State",+234 806 277 0113,8.1300,4.2400
+Jos University Teaching Hospital,Plateau,Jos,"Katon Rikkos, Jos 930105, Plateau State",+234 909 305 0548,9.9200,8.8900
+Plateau Specialist Hospital,Plateau,Jos,"2A Gomwalk Road, Jos 930105, Plateau State",,9.9100,8.8800
+University of Port Harcourt Teaching Hospital,Rivers,Port Harcourt,"East-West Road, Choba, Port Harcourt 500102, Rivers State",+234 84 238 923,4.8900,6.9200
+Rivers State University Teaching Hospital,Rivers,Port Harcourt,"6-8 Harley Street, Old GRA, Port Harcourt 500101, Rivers State",+234 705 561 5657,4.7800,7.0000
+Usmanu Danfodiyo University Teaching Hospital,Sokoto,Sokoto,"1 Garba Nadama Road, Mabera, Sokoto 840232, Sokoto State",+234 903 390 9497,13.0400,5.2300
+Specialist Hospital Sokoto,Sokoto,Sokoto,"Sultan Abubakar Road, Sokoto 840283, Sokoto State",+234 806 547 7975,13.0500,5.2400
+Federal Medical Centre Jalingo,Taraba,Jalingo,"Off Barde Way, Jalingo 660213, Taraba State",+234 803 333 3233,8.8900,11.3700
+Specialist Hospital Jalingo,Taraba,Jalingo,"W95R+3Q4, Jalingo 660213, Taraba State",+234 802 459 8439,8.8920,11.3750
+Federal Medical Centre Nguru,Yobe,Nguru,"Nguru 630261, Yobe State",+234 706 886 9983,12.8700,10.4500
+Yobe State Specialist Hospital,Yobe,Damaturu,"PXH4+GCJ, Damaturu 620101, Yobe State",+234 706 115 7744,11.7400,11.9600
+Federal Medical Centre Gusau,Zamfara,Gusau,"Gusau 860231, Zamfara State",+234 813 007 5323,12.1600,6.6600
+Yariman Bakura Specialist Hospital,Zamfara,Gusau,"Zaria Road, Gusau 632101, Zamfara State",+234 912 755 9825,12.1700,6.6700
+University Of Abuja Teaching Hospital,FCT (Abuja),Gwagwalada,"Gwagwalada-Zuba Road, Gwagwalada 902101, Federal Capital Territory",+234 703 499 4045,8.9500,7.0800
+Supreme Dermatology and Specialist Hospital,FCT (Abuja),Abuja,"Apo Resettlement, Plot 2127 Road 5, Abuja 900104, Federal Capital Territory",+234 810 140 7128,8.9800,7.5100
