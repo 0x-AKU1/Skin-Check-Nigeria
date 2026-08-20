@@ -1,4 +1,5 @@
 gradio>=4.44.0
 transformers>=4.44.0
 torch>=2.2.0
+torchvision>=0.17.0
 Pillow>=10.0.0
