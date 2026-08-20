@@ -1,6 +1,6 @@
 """
-SkinCheck Nigeria
-------------------
+SkinCheck Nigeria (Streamlit version)
+--------------------------------------
 Upload a photo of a skin concern -> get a preliminary AI screening
 -> get referred to the nearest partner clinics in Nigeria.
 
@@ -10,35 +10,40 @@ real care, not to replace a dermatologist.
 
 Model: Jayanth2002/dinov2-base-finetuned-SkinDisease (pretrained, not
 fine-tuned further here). ~22-31 dermatological classes, ~96% reported
-test accuracy on its own benchmark. See MODEL_CARD.md for details.
+test accuracy on its own benchmark.
 
-Run locally:      python app.py
-Deploy on HF:      push this repo to a Hugging Face Space (see README.md)
+Run locally:      streamlit run app.py
+Deploy free:       push to GitHub -> share.streamlit.io -> connect repo
 """
 
 import math
 import csv
 import os
-import gradio as gr
+import streamlit as st
 from transformers import AutoModelForImageClassification, AutoImageProcessor
 import torch
 
+st.set_page_config(page_title="SkinCheck Nigeria", page_icon="🩺", layout="wide")
+
 # ---------------------------------------------------------------------------
-# 1. MODEL
+# 1. MODEL (cached so it only loads once, not on every interaction)
 # ---------------------------------------------------------------------------
 
 MODEL_ID = "Jayanth2002/dinov2-base-finetuned-SkinDisease"
 
-print("Loading model... (first run downloads weights, ~350MB)")
-processor = AutoImageProcessor.from_pretrained(MODEL_ID)
-model = AutoModelForImageClassification.from_pretrained(MODEL_ID)
-model.eval()
 
+@st.cache_resource(show_spinner="Loading model (first run only, ~350MB)...")
+def load_model():
+    processor = AutoImageProcessor.from_pretrained(MODEL_ID)
+    model = AutoModelForImageClassification.from_pretrained(MODEL_ID, low_cpu_mem_usage=True)
+    model.eval()
+    torch.set_num_threads(1)
+    return processor, model
+
+
+processor, model = load_model()
 ID2LABEL = model.config.id2label
 
-# Very rough "what kind of condition is this" bucket, used only to decide
-# how urgent the referral message sounds. Keep this conservative: anything
-# not obviously benign defaults to "see a professional soon."
 URGENT_KEYWORDS = [
     "melanoma", "carcinoma", "malignant", "leprosy", "lupus",
     "epidermolysis", "neurofibromatosis",
@@ -53,8 +58,6 @@ def urgency_for(label: str) -> str:
 
 
 def predict_skin(image):
-    if image is None:
-        return [], "routine"
     inputs = processor(image.convert("RGB"), return_tensors="pt")
     with torch.no_grad():
         logits = model(**inputs).logits
@@ -68,14 +71,6 @@ def predict_skin(image):
 # ---------------------------------------------------------------------------
 # 2. CLINICS
 # ---------------------------------------------------------------------------
-# clinics.csv columns: name,state,city,address,phone,lat,lon
-# lat/lon are OPTIONAL. If present for both the clinic and the user's
-# chosen location, we sort by real distance (haversine). If not, we just
-# group by state/city.
-#
-# Vic: drop your real clinic list into clinics.csv using this header and
-# everything below just works. A tiny starter file ships here so the app
-# runs end-to-end before you send the real data.
 
 CLINICS_CSV = os.path.join(os.path.dirname(__file__), "clinics.csv")
 
@@ -88,6 +83,7 @@ NIGERIAN_STATES = [
 ]
 
 
+@st.cache_data
 def load_clinics():
     clinics = []
     if not os.path.exists(CLINICS_CSV):
@@ -107,119 +103,80 @@ def haversine_km(lat1, lon1, lat2, lon2):
     return 2 * R * math.asin(math.sqrt(a))
 
 
-def find_clinics(state: str, city: str, user_lat=None, user_lon=None, limit=5):
+def find_clinics(state: str, city: str, limit=5):
     clinics = load_clinics()
     if not clinics:
         return []
-
     same_state = [c for c in clinics if c.get("state", "").strip().lower() == (state or "").strip().lower()]
-    pool = same_state if same_state else clinics  # fall back to nationwide list if nothing in-state
-
-    if user_lat is not None and user_lon is not None:
-        def dist(c):
-            try:
-                return haversine_km(user_lat, user_lon, float(c["lat"]), float(c["lon"]))
-            except (KeyError, ValueError, TypeError):
-                return float("inf")
-        pool = sorted(pool, key=dist)
-    else:
-        # no coordinates: prioritize same city, then just keep CSV order
-        if city:
-            pool = sorted(pool, key=lambda c: 0 if c.get("city", "").strip().lower() == city.strip().lower() else 1)
-
+    pool = same_state if same_state else clinics
+    if city:
+        pool = sorted(pool, key=lambda c: 0 if c.get("city", "").strip().lower() == city.strip().lower() else 1)
     return pool[:limit]
 
 
 # ---------------------------------------------------------------------------
-# 3. APP LOGIC
+# 3. UI
 # ---------------------------------------------------------------------------
 
-DISCLAIMER = (
-    "⚠️ **This is an AI screening aid, not a medical diagnosis.** "
-    "It cannot examine your skin the way a clinician can, and it can be wrong. "
-    "Use it to decide *whether to see someone* — not as a final answer. "
-    "If you notice rapid change, bleeding, spreading, or severe pain, see a "
-    "clinic now regardless of what this tool says."
+st.title("🩺 SkinCheck Nigeria")
+st.warning(
+    "**This is an AI screening aid, not a medical diagnosis.** It cannot examine "
+    "your skin the way a clinician can, and it can be wrong. Use it to decide "
+    "*whether to see someone* — not as a final answer. If you notice rapid "
+    "change, bleeding, spreading, or severe pain, see a clinic now regardless "
+    "of what this tool says."
 )
 
+col1, col2 = st.columns(2)
 
-def format_predictions(results):
-    if not results:
-        return "Upload a clear, well-lit photo of the affected area to get started."
-    lines = ["### Top possibilities\n"]
-    for label, prob in results:
-        bar = "█" * max(1, int(prob * 20))
-        lines.append(f"**{label}** — {prob*100:.1f}%\n`{bar}`\n")
-    lines.append(
-        "\n*These are ranked guesses from an image classifier, not a diagnosis. "
-        "Multiple skin conditions look alike in photos.*"
-    )
-    return "\n".join(lines)
+with col1:
+    uploaded = st.file_uploader("Photo of the affected skin area", type=["png", "jpg", "jpeg"])
+    state = st.selectbox("Your state", NIGERIAN_STATES, index=NIGERIAN_STATES.index("Lagos"))
+    city = st.text_input("Your city / area (optional)", placeholder="e.g. Ikeja")
+    analyze = st.button("Analyze", type="primary")
 
+with col2:
+    if analyze and uploaded is not None:
+        from PIL import Image
+        image = Image.open(uploaded)
+        st.image(image, caption="Uploaded photo", width=250)
 
-def format_clinics(clinics, state):
-    if not clinics:
-        return (
-            f"No clinics loaded yet for **{state or 'your area'}**. "
-            "Once the clinic directory is added to `clinics.csv`, matches will appear here."
-        )
-    lines = [f"### Suggested clinics near **{state}**\n"]
-    for c in clinics:
-        lines.append(
-            f"**{c.get('name','Unnamed clinic')}**  \n"
-            f"{c.get('address','')}, {c.get('city','')}, {c.get('state','')}  \n"
-            f"📞 {c.get('phone','N/A')}\n"
-        )
-    return "\n".join(lines)
+        with st.spinner("Analyzing..."):
+            results, urgency = predict_skin(image)
 
-
-def run(image, state, city):
-    results, urgency = predict_skin(image)
-    pred_md = format_predictions(results)
-
-    urgency_note = ""
-    if urgency == "high":
-        urgency_note = (
-            "\n\n🔴 **One of the top matches is a condition that can be serious "
-            "(e.g. malignant or systemic). Please prioritize seeing a clinician "
-            "in person soon — don't wait this one out.**"
+        st.subheader("Top possibilities")
+        for label, prob in results:
+            st.write(f"**{label}** — {prob*100:.1f}%")
+            st.progress(min(prob, 1.0))
+        st.caption(
+            "These are ranked guesses from an image classifier, not a diagnosis. "
+            "Multiple skin conditions look alike in photos."
         )
 
-    clinics = find_clinics(state, city)
-    clinic_md = format_clinics(clinics, state)
+        if urgency == "high":
+            st.error(
+                "🔴 One of the top matches is a condition that can be serious "
+                "(e.g. malignant or systemic). Please prioritize seeing a "
+                "clinician in person soon — don't wait this one out."
+            )
 
-    return pred_md + urgency_note, clinic_md
+        st.subheader(f"Suggested clinics near {state}")
+        clinics = find_clinics(state, city)
+        if not clinics:
+            st.info(f"No clinics loaded yet for {state}.")
+        else:
+            for c in clinics:
+                with st.container(border=True):
+                    st.markdown(f"**{c.get('name','Unnamed clinic')}**")
+                    st.write(f"{c.get('address','')}, {c.get('city','')}, {c.get('state','')}")
+                    st.write(f"📞 {c.get('phone','N/A')}")
+    elif analyze and uploaded is None:
+        st.info("Upload a photo first.")
+    else:
+        st.info("Upload a clear, well-lit photo and click Analyze to get started.")
 
-
-# ---------------------------------------------------------------------------
-# 4. UI
-# ---------------------------------------------------------------------------
-
-with gr.Blocks(title="SkinCheck Nigeria", theme=gr.themes.Soft(primary_hue="teal")) as demo:
-    gr.Markdown("# 🩺 SkinCheck Nigeria")
-    gr.Markdown(DISCLAIMER)
-
-    with gr.Row():
-        with gr.Column(scale=1):
-            image_in = gr.Image(type="pil", label="Photo of the affected skin area")
-            state_in = gr.Dropdown(choices=NIGERIAN_STATES, label="Your state", value="Lagos")
-            city_in = gr.Textbox(label="Your city / area (optional)", placeholder="e.g. Ikeja")
-            submit = gr.Button("Analyze", variant="primary")
-        with gr.Column(scale=1):
-            pred_out = gr.Markdown()
-            clinic_out = gr.Markdown()
-
-    submit.click(run, inputs=[image_in, state_in, city_in], outputs=[pred_out, clinic_out])
-
-    gr.Markdown(
-        "---\n*Model: [Jayanth2002/dinov2-base-finetuned-SkinDisease]"
-        "(https://huggingface.co/Jayanth2002/dinov2-base-finetuned-SkinDisease). "
-        "Clinic directory is community-maintained — see `clinics.csv`.*"
-    )
-
-if __name__ == "__main__":
-    # Render (and most non-HF hosts) assign a port via the PORT env var and
-    # expect the app to bind to 0.0.0.0. Falls back to Gradio's default
-    # (7860) for local runs, so nothing changes when testing on your machine.
-    port = int(os.environ.get("PORT", 7860))
-    demo.launch(server_name="0.0.0.0", server_port=port)
+st.markdown("---")
+st.caption(
+    f"Model: [Jayanth2002/dinov2-base-finetuned-SkinDisease]"
+    f"(https://huggingface.co/{MODEL_ID}). Clinic directory is community-maintained — see clinics.csv."
+)
