@@ -31,6 +31,13 @@ st.set_page_config(page_title="SkinCheck Nigeria", page_icon="🩺", layout="wid
 
 MODEL_ID = "Jayanth2002/dinov2-base-finetuned-SkinDisease"
 
+# Optional second model covering conditions the main model is missing
+# (Vitiligo, Eczema, Contact Dermatitis, Scabies, Normal Skin). Leave this
+# blank until you've trained one with train_specialist_colab.py and pushed
+# it to your own Hugging Face repo — the app runs fine without it, it just
+# won't catch these specific conditions until you add it.
+SPECIALIST_MODEL_ID = "1nOnlyVic/skincheck-specialist"
+
 
 @st.cache_resource(show_spinner="Loading model (first run only, ~350MB)...")
 def load_model():
@@ -41,12 +48,23 @@ def load_model():
     return processor, model
 
 
+@st.cache_resource(show_spinner="Loading specialist model...")
+def load_specialist_model():
+    if not SPECIALIST_MODEL_ID:
+        return None, None
+    processor = AutoImageProcessor.from_pretrained(SPECIALIST_MODEL_ID)
+    model = AutoModelForImageClassification.from_pretrained(SPECIALIST_MODEL_ID, low_cpu_mem_usage=True)
+    model.eval()
+    return processor, model
+
+
 processor, model = load_model()
+specialist_processor, specialist_model = load_specialist_model()
 ID2LABEL = model.config.id2label
 
 URGENT_KEYWORDS = [
     "melanoma", "carcinoma", "malignant", "leprosy", "lupus",
-    "epidermolysis", "neurofibromatosis",
+    "epidermolysis", "neurofibromatosis", "monkeypox",
 ]
 
 
@@ -57,13 +75,35 @@ def urgency_for(label: str) -> str:
     return "routine"
 
 
+def is_normal_skin(label: str) -> bool:
+    return "normal" in label.lower() and "skin" in label.lower()
+
+
 def predict_skin(image):
-    inputs = processor(image.convert("RGB"), return_tensors="pt")
+    img = image.convert("RGB")
+    inputs = processor(img, return_tensors="pt")
     with torch.no_grad():
         logits = model(**inputs).logits
     probs = torch.softmax(logits, dim=-1)[0]
-    top5 = torch.topk(probs, k=min(5, probs.shape[-1]))
-    results = [(ID2LABEL[i.item()], float(p)) for p, i in zip(top5.values, top5.indices)]
+
+    # If a specialist model is configured, run it too and merge results into
+    # one ranked list — so "Vitiligo" or "Eczema" can outrank a main-model
+    # guess if the specialist model is more confident about it.
+    combined = [(ID2LABEL[i], float(p)) for i, p in enumerate(probs)]
+
+    if specialist_model is not None:
+        sp_inputs = specialist_processor(img, return_tensors="pt")
+        with torch.no_grad():
+            sp_logits = specialist_model(**sp_inputs).logits
+        sp_probs = torch.softmax(sp_logits, dim=-1)[0]
+        sp_id2label = specialist_model.config.id2label
+        # Halve specialist confidences slightly relative to the main model's
+        # scale isn't necessary since both are independent softmaxes over
+        # different class sets — we just merge and re-rank by raw confidence.
+        combined += [(sp_id2label[i], float(p)) for i, p in enumerate(sp_probs)]
+
+    combined.sort(key=lambda x: x[1], reverse=True)
+    results = combined[:5]
     top_label = results[0][0]
     return results, urgency_for(top_label)
 
@@ -153,7 +193,14 @@ with col2:
             "Multiple skin conditions look alike in photos."
         )
 
-        if urgency == "high":
+        if is_normal_skin(results[0][0]) and results[0][1] > 0.5:
+            st.success(
+                "✅ This photo doesn't show a clear sign of any of the conditions "
+                "this tool screens for. If something still feels off (itching, "
+                "pain, changes over time), it's still worth a professional look — "
+                "this isn't a clean bill of health, just a low-signal result."
+            )
+        elif urgency == "high":
             st.error(
                 "🔴 One of the top matches is a condition that can be serious "
                 "(e.g. malignant or systemic). Please prioritize seeing a "
