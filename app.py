@@ -226,4 +226,5 @@ st.markdown("---")
 st.caption(
     f"Model: [Jayanth2002/dinov2-base-finetuned-SkinDisease]"
     f"(https://huggingface.co/{MODEL_ID}). Clinic directory is community-maintained — see clinics.csv."
+    f"creators: OGBONNA SOMTOCHUKWU NNAEMEKA, ANAMELECHI AKACHUKWU VICTOR, MGBEBU EPHRAIM CHIMA."
 )
