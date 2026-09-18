@@ -12,8 +12,8 @@ Model: Jayanth2002/dinov2-base-finetuned-SkinDisease (pretrained, not
 fine-tuned further here). ~22-31 dermatological classes, ~96% reported
 test accuracy on its own benchmark.
 
-Run locally:      streamlit run app.py
-Deploy free:       push to GitHub -> share.streamlit.io -> connect repo
+Run locally: streamlit run app.py
+Deploy free: push to GitHub -> share.streamlit.io -> connect repo
 """
 
 import math
@@ -24,6 +24,17 @@ from transformers import AutoModelForImageClassification, AutoImageProcessor
 import torch
 
 st.set_page_config(page_title="SkinCheck Nigeria", page_icon="🩺", layout="wide")
+
+# Hide Streamlit's built-in toolbar and (where possible) the Community
+# Cloud Fork/GitHub badge. The badge sometimes lives outside this app's
+# own DOM on a public repo, so this isn't guaranteed to catch it — if it's
+# still visible after deploying, make the GitHub repo private instead.
+st.markdown("""
+<style>
+[data-testid="stToolbar"] {visibility: hidden;}
+.viewerBadge_container__1QSob {display: none;}
+</style>
+""", unsafe_allow_html=True)
 
 # ---------------------------------------------------------------------------
 # 1. MODEL (cached so it only loads once, not on every interaction)
@@ -158,7 +169,12 @@ def find_clinics(state: str, city: str, limit=5):
 # 3. UI
 # ---------------------------------------------------------------------------
 
-st.title("🩺 SkinCheck Nigeria")
+logo_col, title_col = st.columns([1, 5])
+with logo_col:
+    st.image("university_logo.png", width=80)
+with title_col:
+    st.title("🩺 SkinCheck Nigeria")
+
 st.warning(
     "**This is an AI screening aid, not a medical diagnosis.** It cannot examine "
     "your skin the way a clinician can, and it can be wrong. Use it to decide "
@@ -226,5 +242,5 @@ st.markdown("---")
 st.caption(
     f"Model: [Jayanth2002/dinov2-base-finetuned-SkinDisease]"
     f"(https://huggingface.co/{MODEL_ID}). Clinic directory is community-maintained — see clinics.csv."
-    f"creators: OGBONNA SOMTOCHUKWU NNAEMEKA, ANAMELECHI AKACHUKWU VICTOR, MGBEBU EPHRAIM CHIMA."
+    f"Creators:[OGBONNA SOMTOCHUKWU NNAEMEKA, ANAMELECHI AKACHUKWU VICTOR, MGBEBU EPHRAIM CHIMA]"
 )
