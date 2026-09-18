@@ -171,7 +171,7 @@ def find_clinics(state: str, city: str, limit=5):
 
 logo_col, title_col = st.columns([1, 5])
 with logo_col:
-    st.image("assets/university_logo.png", width=80)
+    st.image("assets/university_logo.png.jpg", width=80)
 with title_col:
     st.title("🩺 SkinCheck Nigeria")
 
